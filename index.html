@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vježba izrade web stranice</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
+
+body{
+background:black;
+color:white;
+overflow-x:hidden;
+}
+
+/* POZADINA */
+.background{
+position:fixed;
+width:100%;
+height:100%;
+background:
+linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)),
+url('https://i.pinimg.com/736x/ac/1b/ac/ac1bacd91b11314e06cc91434f1feb13.jpg')
+no-repeat center center;
+background-size:cover;
+z-index:-3;
+}
+
+/* SNJEG */
+.snow{
+position:fixed;
+width:100%;
+height:100%;
+background:url('https://www.transparentpng.com/download/snowflakes/e596bF-snowflakes-picture.png') repeat;
+animation:snow 20s linear infinite;
+opacity:0.25;
+z-index:-2;
+pointer-events:none;
+}
+
+@keyframes snow{
+from{background-position:0 0;}
+to{background-position:0 1000px;}
+}
+
+/* MAGLA */
+.fog{
+position:fixed;
+width:200%;
+height:100%;
+background:rgba(255,255,255,0.05);
+filter:blur(40px);
+animation:fogMove 30s linear infinite;
+z-index:-1;
+}
+
+@keyframes fogMove{
+from{transform:translateX(-50%);}
+to{transform:translateX(0%);}
+}
+
+/* START SCREEN */
+#startScreen{
+position:fixed;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.9);
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:2000;
+}
+
+#startScreen h1{
+font-size:3rem;
+margin-bottom:20px;
+color:#00c3ff;
+}
+
+#startScreen button{
+padding:15px 30px;
+border:none;
+background:#00c3ff;
+cursor:pointer;
+font-weight:bold;
+}
+
+/* NAVIGACIJA */
+nav{
+background:rgba(0,0,0,0.7);
+padding:15px;
+display:flex;
+justify-content:center;
+gap:15px;
+}
+
+nav button{
+padding:10px 20px;
+border:none;
+background:#1f1f1f;
+color:white;
+cursor:pointer;
+transition:0.3s;
+}
+
+nav button:hover{
+background:#00c3ff;
+color:black;
+}
+
+.page{
+display:none;
+padding:40px;
+animation:fade 0.5s ease;
+}
+
+.active{
+display:block;
+}
+
+@keyframes fade{
+from{opacity:0; transform:translateY(20px);}
+to{opacity:1; transform:translateY(0);}
+}
+
+.gallery{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+margin-top:20px;
+}
+
+.gallery-item{
+position:relative;
+animation:fadeIn 0.4s ease;
+}
+
+.gallery-item img{
+width:100%;
+height:200px;
+object-fit:cover;
+border-radius:10px;
+cursor:pointer;
+}
+
+.delete{
+position:absolute;
+top:5px;
+right:5px;
+background:red;
+border:none;
+color:white;
+padding:5px 8px;
+cursor:pointer;
+border-radius:5px;
+}
+
+@keyframes fadeIn{
+from{opacity:0; transform:scale(0.9);}
+to{opacity:1; transform:scale(1);}
+}
+
+#dropZone{
+border:2px dashed #00c3ff;
+padding:30px;
+text-align:center;
+margin-top:20px;
+border-radius:10px;
+transition:0.3s;
+}
+
+#dropZone.drag{
+background:rgba(0,195,255,0.2);
+}
+
+.cards{
+display:flex;
+flex-wrap:wrap;
+gap:20px;
+justify-content:center;
+}
+
+.card{
+background:rgba(0,0,0,0.7);
+padding:25px;
+border-radius:10px;
+width:250px;
+transition:0.3s;
+}
+
+.card:hover{
+background:#00c3ff;
+color:black;
+transform:translateY(-10px);
+}
+
+h1,h2{
+text-align:center;
+margin-bottom:20px;
+color:#00c3ff;
+}
+
+#fullscreen{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.9);
+justify-content:center;
+align-items:center;
+z-index:3000;
+}
+
+#fullscreen img{
+max-width:90%;
+max-height:90%;
+}
+
+footer{
+text-align:center;
+padding:30px;
+background:rgba(0,0,0,0.7);
+margin-top:50px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="background"></div>
+<div class="snow"></div>
+<div class="fog"></div>
+
+<div id="startScreen">
+<h1>Projekt "Osnove preživljavanja u zimskim uvjetima"</h1>
+<button onclick="pokreni()">Uđi u sustav</button>
+</div>
+
+<nav>
+<button onclick="prikazi('pocetna')">Početna</button>
+<button onclick="prikazi('galerija')">Galerija</button>
+<button onclick="prikazi('zadaci')">Zadaci</button>
+<button onclick="prikazi('savjeti')">Savjeti</button>
+<button onclick="prikazi('projekt')">O projektu</button>
+</nav>
+
+<div id="pocetna" class="page active">
+<h1>Dobrodošli!</h1>
+<p>Ova web stranica izrađena je kao prikaz određenih osnova kod preživljavanja u zimskim uvjetima.</p>
+
+<p>Ovdje se mogu pronaći određeni savjeti te zadaci za početak preživljavanja u zimskom okruženju.</p>
+
+<p>Također, mogu se naći te podijeliti slike iz jedne igre, zvane "The Long Dark", stvorena od strane kanadskog studia Hiterland Studios koja može poslužiti kao simulator ekstremnih zimskih uvjeta.</p>
+
+</div>
+
+<div id="galerija" class="page">
+<h1>Galerija</h1>
+
+<input type="file" id="upload" accept="image/*" multiple>
+
+<div id="dropZone">Povuci slike ovdje</div>
+
+<div class="gallery" id="container"></div>
+</div>
+
+<div id="zadaci" class="page">
+<h2>Zadaci</h2>
+<div class="cards">
+<div class="card">Istražite teren oko sebe!</div>
+<div class="card">Pronađite resurse u vašoj okolini.</div>
+<div class="card">Izgradite sklonište od nađenih resursa.</div>
+<div class="card">Preživite nadolazeću zimu.</div>
+</div>
+</div>
+
+<div id="savjeti" class="page">
+<h2>Savjeti za preživljavanje</h2>
+<div class="cards">
+<div class="card">Pratite vremenske uvjete.</div>
+<div class="card">Nosite toplu odjeću.</div>
+<div class="card">Štedite energiju.</div>
+<div class="card">Planirajte rutu kretanja.</div>
+</div>
+</div>
+
+<div id="projekt" class="page">
+<h2>O projektu</h2>
+<p>
+Projekt koristi HTML, CSS i JavaScript.
+Implementira navigaciju unutar jedne stranice,
+animirane efekte te sustav za učitavanje slika.
+Tema je inspirirana zimskom survival atmosferom.
+</p>
+<p> Ovaj projekt služi kao vježba izrada web stranica.</p>
+</div>
+
+<div id="fullscreen" onclick="zatvoriFullscreen()">
+<img id="fullscreenImg">
+</div>
+
+<footer>
+© 2026 Lovro Tovernić
+</footer>
+
+<script>
+
+function pokreni(){
+document.getElementById("startScreen").style.display="none";
+}
+
+function prikazi(id){
+let stranice=document.querySelectorAll('.page');
+stranice.forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+
+const container=document.getElementById("container");
+const upload=document.getElementById("upload");
+const dropZone=document.getElementById("dropZone");
+
+window.onload=function(){
+let spremljene=JSON.parse(localStorage.getItem("slike"))||[];
+spremljene.forEach(src=>dodajSliku(src));
+}
+
+function dodajSliku(src){
+
+let div=document.createElement("div");
+div.className="gallery-item";
+
+let img=document.createElement("img");
+img.src=src;
+img.onclick=function(){fullscreen(src)}
+
+let del=document.createElement("button");
+del.className="delete";
+del.innerText="X";
+
+del.onclick=function(){
+
+div.remove();
+
+let spremljene=JSON.parse(localStorage.getItem("slike"))||[];
+spremljene=spremljene.filter(s=>s!==src);
+localStorage.setItem("slike",JSON.stringify(spremljene));
+
+}
+
+div.appendChild(img);
+div.appendChild(del);
+
+container.appendChild(div);
+}
+
+upload.addEventListener("change",function(e){
+handleFiles(e.target.files);
+});
+
+dropZone.addEventListener("dragover",function(e){
+e.preventDefault();
+dropZone.classList.add("drag");
+});
+
+dropZone.addEventListener("dragleave",function(){
+dropZone.classList.remove("drag");
+});
+
+dropZone.addEventListener("drop",function(e){
+e.preventDefault();
+dropZone.classList.remove("drag");
+handleFiles(e.dataTransfer.files);
+});
+
+function handleFiles(files){
+
+for(let i=0;i<files.length;i++){
+
+let file=files[i];
+
+if(file.size>10000000){
+alert("Slika je prevelika (max 10MB)");
+continue;
+}
+
+let reader=new FileReader();
+
+reader.onload=function(e){
+
+let src=e.target.result;
+
+dodajSliku(src);
+
+let spremljene=JSON.parse(localStorage.getItem("slike"))||[];
+spremljene.push(src);
+
+localStorage.setItem("slike",JSON.stringify(spremljene));
+
+}
+
+reader.readAsDataURL(file);
+}
+}
+
+function fullscreen(src){
+
+let fs=document.getElementById("fullscreen");
+let img=document.getElementById("fullscreenImg");
+
+img.src=src;
+fs.style.display="flex";
+
+}
+
+function zatvoriFullscreen(){
+document.getElementById("fullscreen").style.display="none";
+}
+
+</script>
+
+</body>
+</html>
